@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+    img.preview{
+  width: 200px;
+}
+ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul > li{
+  display: inline-block;
+  vertical-align: top;
+}
+</style>
+</head>
+<body>
+    <label for="">帳號</label><font id="user_err"></font>
+    <input type="text" name="username" id="username">
+    <label for="">密碼</label><font id="pass_err"></font>
+    <input type="password" name="password" id="password">
+    <label for="">名稱</label><font id="name_err"></font>
+    <input type="text" name="nickname" id="nickname">
+    <label for="">生日</label><font id="birth_err"></font>
+    <input type="date" name="birthday" id="birthday">
+    <input type="file" id="the_file" accept="image/*" multiple >
+    <ul class="picture_list"></ul>
+    <button type="submit" id="submit">送出</button>
+    <div class="div">
+        <label for="">刪除id</label><font id="del_err"></font>
+        <input type="text" name="id" id="id">
+        <button type="submit" id="del_submit">送出</button>
+    </div>
+    <div class="div">
+        <label for="">修改的id</label><font id="up_err"></font>
+        <input type="text" name="up_id" id="up_id">
+        <label for="">密碼</label><font id="pass_err"></font>
+        <input type="password" name="password" id="password1">
+        <label for="">名稱</label><font id="name_err"></font>
+        <input type="text" name="nickname" id="nickname1">
+        <input type="file" id="the_file1" accept="image/*" multiple >
+        <ul class="picture_list1"></ul>
+        <button type="submit" id="up_submit">送出</button>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+    $(function(){
+        const username = document.querySelector("#username");
+        const password = document.querySelector("#password");
+        const nickname = document.querySelector("#nickname");
+        const birthday = document.querySelector("#birthday");
+        const submit = document.querySelector("#submit");
+        const user_err = document.querySelector("#user_err");
+        const pass_err = document.querySelector("#pass_err");
+        const name_err = document.querySelector("#name_err");
+        const birth_err = document.querySelector("#birth_err");
+        const reader = new FileReader();
+        const reader1 = new FileReader();
+        const id = document.querySelector("#id");
+        const er_id = document.querySelector("#del_err");
+        const delet = document.querySelector("#del_submit");
+        const update = document.querySelector("#up_submit");
+        const up_id = document.querySelector("#up_id");
+        const password1 = document.querySelector("#password1");
+        const nickname1 = document.querySelector("#nickname1");
+        window.addEventListener("load", function(){
+        // 寫在這
+       
+  var the_file_element = document.getElementById("the_file");
+  the_file_element.addEventListener("change", function(e){          
+
+            console.log(this.files);    // FileList
+            console.log(this.files[0]); // File
+    // 寫在這
+    var picture_list = document.getElementsByClassName("picture_list")[0];
+    picture_list.innerHTML = ""; // 清空
+    
+    // 跑每個使用者選的檔案，留意 i 的部份
+    for (let i = 0; i < this.files.length; i++) {
+       // 用來讀取檔案
+      reader.readAsDataURL(this.files[i]); // 讀取檔案
+      reader.addEventListener("load", function () {
+        console.log(reader.result);
+        let li_html = `
+                <li><img src="${reader.result}" class="preview"></li>
+              `;
+        picture_list.insertAdjacentHTML("beforeend", li_html); // 加進節點
+      });
+    }
+
+});
+    var the_file_element1 = document.getElementById("the_file1");
+    the_file_element1.addEventListener("change", function(e){          
+
+            console.log(this.files);    // FileList
+            console.log(this.files[0]); // File
+    // 寫在這
+    var picture_list1 = document.getElementsByClassName("picture_list1")[0];
+    picture_list1.innerHTML = ""; // 清空
+    
+    // 跑每個使用者選的檔案，留意 i 的部份
+    for (let i = 0; i < this.files.length; i++) {
+       // 用來讀取檔案
+      reader1.readAsDataURL(this.files[i]); // 讀取檔案
+      reader1.addEventListener("load", function () {
+        console.log(reader1.result);
+        let li_html1 = `
+                <li><img src="${reader1.result}" class="preview"></li>
+              `;
+        picture_list1.insertAdjacentHTML("beforeend", li_html1); // 加進節點
+      });
+    }
+
+});
+
+
+        });
+        submit.addEventListener("click",function(e){
+            
+            if(username.value == null){
+                user_err.textContent = "請勿空白"
+                e.preventDefault();
+            }else{
+                user_err.textContent ="";
+            }
+            if(password.value == null){
+                pass_err.textContent = "請勿空白"
+                e.preventDefault();
+            }else{
+                pass_err.textContent = "";
+            }
+            if(nickname.value == null){
+                name_err.textContent = "請勿空白";
+                e.preventDefault();
+            }else{
+                name_err.textContent = "";
+            }
+            if(birthday.value == null){
+                birth_err.textContent = "請勿空白";
+                e.preventDefault();
+            }else{
+                birth_err.textContent = "";
+            }
+        fetch('http://localhost:8080/ball-boot/api/insert',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+          body: JSON.stringify({
+            username: username.value,
+            password: password.value,
+            nickname: nickname.value,
+            birthday: birthday.value,
+            base64img:reader.result
+          }),
+        })
+            .then(resp => resp.json())
+             .then(body => {
+                console.log(body);
+                if(body.successful){
+                    console.log(body)
+                }
+            })
+        })
+    	delet.addEventListener("click",()=>{
+            if(id.value == ""){
+                er_id.textContent = "請勿空白"
+            }else{
+                er_id.textContent = "";
+            }
+            fetch('http://localhost:8080/ball-boot/api/delete',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id.value
+                }),
+            })
+            .then(resp => resp.json())
+            .then(id => {
+                console.log(id);
+                if(id){
+                    console.log(id)
+                }
+            })
+        })
+            update.addEventListener("click",function(){
+                if(password.value == null){
+                pass_err.textContent = "請勿空白"
+                e.preventDefault();
+            }else{
+                pass_err.textContent = "";
+            }
+            if(nickname1.value == null){
+                name_err.textContent = "請勿空白";
+                e.preventDefault();
+            }else{
+                name_err.textContent = "";
+            }
+            fetch('http://localhost:8080/ball-boot/api/update',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+          body: JSON.stringify({
+            id: up_id.value,
+            password: password1.value,
+            nickname: nickname1.value,
+            base64img:reader1.result
+          }),
+        })
+            .then(resp => resp.json())
+             .then(body => {
+                console.log(body);
+                if(body.successful){
+                    console.log(body)
+                }
+            })
+            })
+        
+    })
+        </script>
+</body>
+</html>

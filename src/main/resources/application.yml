@@ -1,0 +1,28 @@
+
+spring:
+  #DataSource
+  datasource:
+    url: jdbc:mysql://localhost:3306/barjarjo?serverTimezone=Asia/Taipei
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+  #SessionFactory
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/views
+#      suffix: .jsp
+  messages:
+    basename: i18n.messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+
