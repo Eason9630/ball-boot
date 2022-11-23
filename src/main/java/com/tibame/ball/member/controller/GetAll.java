@@ -15,7 +15,7 @@ import com.tibame.ball.member.vo.MemberVO;
 @RestController
 @CrossOrigin(origins = "*",maxAge = 3600)
 @RequestMapping( path = {"api"})
-public class getAll {
+public class GetAll {
 
 		@Autowired
 		private MemberServiceImpl service;
