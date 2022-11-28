@@ -17,7 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
- * RSA
+ * RSA 非對稱加密
  * @author linfuli
  * throws Exception 
  */
